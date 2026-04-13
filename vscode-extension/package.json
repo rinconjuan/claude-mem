@@ -1,0 +1,145 @@
+{
+  "name": "claude-mem-vscode",
+  "displayName": "claude-mem for VS Code",
+  "description": "Persistent memory for GitHub Copilot — captures tool use, file edits, and terminal commands to build a searchable knowledge base across sessions.",
+  "version": "0.1.0",
+  "publisher": "thedotmack",
+  "license": "AGPL-3.0",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e2e",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thedotmack/claude-mem.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thedotmack/claude-mem/issues"
+  },
+  "homepage": "https://docs.claude-mem.ai",
+  "keywords": [
+    "copilot",
+    "memory",
+    "ai",
+    "claude",
+    "persistence",
+    "context",
+    "knowledge-base"
+  ],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "AI",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "claude-mem.openViewer",
+        "title": "claude-mem: Open Memory Viewer",
+        "icon": "$(database)"
+      },
+      {
+        "command": "claude-mem.startWorker",
+        "title": "claude-mem: Start Worker"
+      },
+      {
+        "command": "claude-mem.stopWorker",
+        "title": "claude-mem: Stop Worker"
+      },
+      {
+        "command": "claude-mem.restartWorker",
+        "title": "claude-mem: Restart Worker"
+      },
+      {
+        "command": "claude-mem.endSession",
+        "title": "claude-mem: End Session & Summarize"
+      },
+      {
+        "command": "claude-mem.showStatus",
+        "title": "claude-mem: Show Status"
+      },
+      {
+        "command": "claude-mem.refreshContext",
+        "title": "claude-mem: Refresh Copilot Context File"
+      },
+      {
+        "command": "claude-mem.configureMcp",
+        "title": "claude-mem: Configure MCP Tools for this Workspace"
+      }
+    ],
+    "configuration": {
+      "title": "claude-mem",
+      "properties": {
+        "claude-mem.workerPort": {
+          "type": "number",
+          "default": 37777,
+          "description": "Port where the claude-mem worker is listening."
+        },
+        "claude-mem.autoStartWorker": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically attempt to start the claude-mem worker if not running (requires claude-mem to be installed globally)."
+        },
+        "claude-mem.captureFileSaves": {
+          "type": "boolean",
+          "default": true,
+          "description": "Record file saves as observations."
+        },
+        "claude-mem.captureTerminal": {
+          "type": "boolean",
+          "default": true,
+          "description": "Record terminal command output as observations."
+        },
+        "claude-mem.contextFileLocation": {
+          "type": "string",
+          "enum": [
+            ".github/copilot-instructions.md",
+            ".vscode/copilot-context.md",
+            "both"
+          ],
+          "default": ".github/copilot-instructions.md",
+          "description": "Where to write the injected context for Copilot. '.github/copilot-instructions.md' is read automatically by GitHub Copilot."
+        },
+        "claude-mem.autoUpdateContextFile": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically update the Copilot context file at session start."
+        },
+        "claude-mem.skipTools": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Tool names to exclude from observations (e.g. 'TodoRead', 'TodoWrite')."
+        },
+        "claude-mem.workerStartCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Custom command to start the claude-mem worker. Leave empty to use the default (npx claude-mem worker:start)."
+        }
+      }
+    },
+    "menus": {
+      "statusBar/remoteIndicator": []
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  }
+}
